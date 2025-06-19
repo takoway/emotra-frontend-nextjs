@@ -112,14 +112,6 @@ export default function RootLayout({
               </Link>
             </div>
           </nav>
-
-          <footer className="border-t bg-white">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
-              <p className="text-center text-sm text-gray-500">
-                © {new Date().getFullYear()} Emotra. All rights reserved.
-              </p>
-            </div>
-          </footer>
         </div>
       </body>
     </html>
