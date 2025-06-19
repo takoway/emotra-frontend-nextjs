@@ -144,9 +144,12 @@ export default function DiaryEdit() {
           </div>
         </div>
         <div>
-          <label htmlFor="mentalScore" className="block text-sm font-medium mb-2">
-            メンタルスコア (1-10)
-          </label>
+          <div className="relative flex items-center mb-2">
+            <label htmlFor="mentalScore" className="block text-sm font-medium">
+              メンタルスコア
+            </label>
+            <div className="absolute inset-0 flex items-center justify-center">{formData.mentalScore}</div>
+          </div>
           <input
             type="range"
             id="mentalScore"
@@ -161,7 +164,6 @@ export default function DiaryEdit() {
             }
             className="w-full accent-gray-600"
           />
-          <div className="text-center mt-1">{formData.mentalScore}</div>
         </div>
         <div>
           <label htmlFor="content" className="block text-sm font-medium mb-2">
@@ -174,7 +176,6 @@ export default function DiaryEdit() {
               setFormData({ ...formData, content: e.target.value })
             }
             className="w-full p-2 border rounded h-24"
-            required
           />
         </div>
         <button
