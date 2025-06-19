@@ -13,5 +13,7 @@
 - `mkdir emotora-frontend-nextjs`
 - `cd emotora-frontend-nextjs`
 - `npx create-next-app@latest`
-- 
-- 
+
+## openapi.ymlから型定義を生成
+- `npx openapi-typescript openapi.yml -o src/types/openapi.d.ts`
+
