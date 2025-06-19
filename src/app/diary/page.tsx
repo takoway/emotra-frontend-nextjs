@@ -1,30 +1,96 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSwr } from "@/hooks/useSwr";
+import { fetcherPost, fetcherPut } from "@/fetch/fetcher";
+import { getTodayDateInTokyo } from "@/utils/date";
+import type { components } from "@/types/openapi";
+import { EP } from "@/utils/endpoints";
 
 export default function DiaryEdit() {
   const router = useRouter();
+  // 仮のユーザーID（本来は認証情報から取得）
+  const userId = 1;
+  const [date, setDate] = useState<string>(getTodayDateInTokyo());
+  // SWRで日記データ取得
+  const { data: diaryData, error, mutate } = useSwr<{
+    data?: components["schemas"]["Diary"]
+  }>(EP.get_diary(userId, date));
+
+  // フォーム状態
   const [formData, setFormData] = useState({
-    date: new Date().toISOString().split("T")[0],
+    date,
     mentalScore: 5,
     content: "",
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    // TODO: APIとの連携処理を実装
-    console.log("送信データ:", formData);
-    router.push("/diary");
+  // 日記データ取得時にフォーム初期値を反映
+  useEffect(() => {
+    if (diaryData?.data) {
+      setFormData({
+        date: formatDate(diaryData.data.date),
+        mentalScore: diaryData.data.mental,
+        content: diaryData.data.diary,
+      });
+    } else {
+      setFormData({
+        date: formatDate(date),
+        mentalScore: 5,
+        content: "",
+      });
+    }
+  }, [diaryData, date]);
+
+  // 日付変更
+  const changeDate = (days: number) => {
+    const currentDate = new Date(date);
+    currentDate.setDate(currentDate.getDate() + days);
+    const newDate = currentDate.toISOString().split("T")[0];
+    setDate(newDate);
   };
 
-  const changeDate = (days: number) => {
-    const currentDate = new Date(formData.date);
-    currentDate.setDate(currentDate.getDate() + days);
-    setFormData({
-      ...formData,
-      date: currentDate.toISOString().split("T")[0],
-    });
+  // 日付input変更
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDate(e.target.value);
+  };
+
+  // 日付をYYYY-MM-DD形式に変換するユーティリティ
+  const formatDate = (dateStr: string) => {
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return dateStr;
+    const d = new Date(dateStr);
+    return d.toISOString().split('T')[0];
+  };
+
+  // 送信処理
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const body = {
+      user_id: userId,
+      date: formatDate(formData.date),
+      mental: formData.mentalScore,
+      diary: formData.content,
+    };
+    let result;
+    if (diaryData?.data) {
+      // 既存日記があれば更新
+      result = await fetcherPut<{ data: components["schemas"]["Diary"] }>(
+        EP.update_diary(userId, formatDate(formData.date)),
+        { mental: formData.mentalScore, diary: formData.content }
+      );
+    } else {
+      // なければ新規作成
+      result = await fetcherPost<{ data: components["schemas"]["Diary"] }>(
+        EP.create_diary(),
+        body
+      );
+    }
+    if (!result.err) {
+      mutate();
+      router.push("/diary");
+    } else {
+      alert("エラーが発生しました");
+    }
   };
 
   return (
@@ -47,9 +113,7 @@ export default function DiaryEdit() {
               type="date"
               id="date"
               value={formData.date}
-              onChange={(e) =>
-                setFormData({ ...formData, date: e.target.value })
-              }
+              onChange={handleDateChange}
               className="flex-1 p-2 border rounded"
               required
             />
@@ -62,7 +126,6 @@ export default function DiaryEdit() {
             </button>
           </div>
         </div>
-
         <div>
           <label htmlFor="mentalScore" className="block text-sm font-medium mb-2">
             メンタルスコア (1-10)
@@ -83,7 +146,6 @@ export default function DiaryEdit() {
           />
           <div className="text-center mt-1">{formData.mentalScore}</div>
         </div>
-
         <div>
           <label htmlFor="content" className="block text-sm font-medium mb-2">
             日記
@@ -98,7 +160,6 @@ export default function DiaryEdit() {
             required
           />
         </div>
-
         <button
           type="submit"
           className="w-full bg-gray-800 text-white py-2 px-4 rounded hover:bg-gray-700 transition-colors"
@@ -106,6 +167,7 @@ export default function DiaryEdit() {
           保存
         </button>
       </form>
+      {error && <div className="text-red-500 mt-2">データ取得エラー</div>}
     </div>
   );
 } 
