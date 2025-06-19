@@ -1,9 +1,6 @@
 import axios, { AxiosError } from "axios";
 
-// APIエンドポイント
-export const EP = {
-    
-}
+axios.defaults.baseURL = process.env.NEXT_PUBLIC_BACKEND_URL + "/api";
 
 export const fetcherGet = async <T>(url: string): Promise<T> =>
     axios.get<T>(url)
