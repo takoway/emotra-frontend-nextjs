@@ -2,15 +2,12 @@ import axios, { AxiosError } from "axios";
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_BACKEND_URL + "/api";
 
-export const fetcherGet = async <T>(url: string): Promise<T | undefined> =>
+export const fetcherGet = async <T>(url: string): Promise<T> =>
     axios.get<T>(url)
         .then((res: { data: T }) => res.data)
         .catch((err: AxiosError) => {
             if (err?.message?.startsWith("Network Error")) {
                 throw { message: "Network Error" };
-            }
-            if (err.response?.status === 404) {
-                return undefined;
             }
             throw err.response;
         });
