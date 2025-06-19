@@ -7,6 +7,8 @@ import { fetcherPost, fetcherPut } from "@/fetch/fetcher";
 import { getTodayDateInTokyo } from "@/utils/date";
 import type { components } from "@/types/openapi";
 import { EP } from "@/utils/endpoints";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function DiaryEdit() {
   const router = useRouter();
@@ -72,6 +74,7 @@ export default function DiaryEdit() {
       diary: formData.content,
     };
     let result;
+    const toastId = toast.loading("保存中...", { position: "top-right" });
     if (diaryData?.data) {
       // 既存日記があれば更新
       result = await fetcherPut<{ data: components["schemas"]["Diary"] }>(
@@ -87,14 +90,28 @@ export default function DiaryEdit() {
     }
     if (!result.err) {
       mutate();
+      toast.update(toastId, {
+        render: "保存完了",
+        type: "success",
+        isLoading: false,
+        autoClose: 1000,
+        position: "top-right",
+      });
       router.push("/diary");
     } else {
-      alert("エラーが発生しました");
+      toast.update(toastId, {
+        render: "エラー",
+        type: "error",
+        isLoading: false,
+        autoClose: 2000,
+        position: "top-right",
+      });
     }
   };
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-2">
+      <ToastContainer position="top-right" toastClassName="custom-toast" className="custom-toast-body" />
       <h1 className="text-2xl font-bold mb-4">日記を書く</h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>

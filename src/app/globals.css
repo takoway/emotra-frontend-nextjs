@@ -24,3 +24,30 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* react-toastify カスタムトースト */
+.custom-toast {
+  max-width: 240px;
+  min-width: 120px;
+  font-size: 0.95rem;
+  margin-top: 1.2rem;
+  margin-right: 0.8rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border-radius: 8px;
+}
+
+.custom-toast-body {
+  padding: 0.7rem 1rem;
+}
+
+@media (max-width: 600px) {
+  .custom-toast {
+    max-width: 40vw;
+    font-size: 0.85rem;
+    margin-top: 3.0rem;
+    margin-right: 0.1rem;
+  }
+  .custom-toast-body {
+    padding: 0.4rem 0.5rem;
+  }
+}
