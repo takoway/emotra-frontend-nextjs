@@ -14,18 +14,17 @@ export default function DiaryEdit() {
   const router = useRouter();
   // 仮のユーザーID（本来は認証情報から取得）
   const userId = 1;
-  const [date, setDate] = useState<string>(getTodayDateInTokyo());
-  // SWRで日記データ取得
-  const { data: diaryData, error, mutate } = useSwr<{
-    data?: components["schemas"]["Diary"]
-  }>(EP.get_diary(userId, date));
-
-  // フォーム状態
+  
   const [formData, setFormData] = useState({
-    date,
+    date: getTodayDateInTokyo(),
     mentalScore: 5,
     content: "",
   });
+
+  // SWRで日記データ取得
+  const { data: diaryData, error, mutate } = useSwr<{
+    data?: components["schemas"]["Diary"]
+  }>(EP.get_diary(userId, formData.date));
 
   // 日記データ取得時にフォーム初期値を反映
   useEffect(() => {
@@ -36,25 +35,26 @@ export default function DiaryEdit() {
         content: diaryData.data.diary,
       });
     } else {
-      setFormData({
-        date: formatDate(date),
+      setFormData(prev => ({
+        ...prev,
+        date: formatDate(formData.date),
         mentalScore: 5,
         content: "",
-      });
+      }));
     }
-  }, [diaryData, date]);
+  }, [diaryData]);
 
   // 日付変更
   const changeDate = (days: number) => {
-    const currentDate = new Date(date);
+    const currentDate = new Date(formData.date);
     currentDate.setDate(currentDate.getDate() + days);
     const newDate = currentDate.toISOString().split("T")[0];
-    setDate(newDate);
+    setFormData(prev => ({ ...prev, date: newDate }));
   };
 
   // 日付input変更
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDate(e.target.value);
+    setFormData(prev => ({ ...prev, date: e.target.value }));
   };
 
   // 日付をYYYY-MM-DD形式に変換するユーティリティ
