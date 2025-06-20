@@ -50,7 +50,6 @@ export const useDiaryForm = ({ userId, initialDate }: UseDiaryFormProps) => {
     } else {
       setFormData(prev => ({
         ...prev,
-        date: formatDate(formData.date),
         mentalScore: 5,
         content: "",
       }));
