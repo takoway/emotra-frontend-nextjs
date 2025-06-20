@@ -56,6 +56,14 @@ export const useDiaryForm = ({ userId, initialDate }: UseDiaryFormProps) => {
     }
   }, [diaryData]);
 
+  // エラーメッセージをカスタマイズ
+  const getErrorMessage = () => {
+    if (error?.status === 404) {
+      return "日記が登録されていません";
+    }
+    return "データ取得エラーが発生しました";
+  };
+
   // 日付変更
   const changeDate = (days: number) => {
     const currentDate = new Date(formData.date);
@@ -136,6 +144,7 @@ export const useDiaryForm = ({ userId, initialDate }: UseDiaryFormProps) => {
     formData,
     diaryData,
     error,
+    getErrorMessage,
     changeDate,
     handleDateChange,
     handleMentalScoreChange,

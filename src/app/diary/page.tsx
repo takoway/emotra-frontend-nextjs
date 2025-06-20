@@ -3,6 +3,7 @@
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { DiaryForm } from "@/components/diary/DiaryForm";
+import { ErrorMessage } from "@/components/common/ErrorMessage";
 import { useDiaryForm } from "@/hooks/useDiaryForm";
 
 export default function DiaryEdit() {
@@ -12,6 +13,7 @@ export default function DiaryEdit() {
   const {
     formData,
     error,
+    getErrorMessage,
     changeDate,
     handleDateChange,
     handleMentalScoreChange,
@@ -35,11 +37,7 @@ export default function DiaryEdit() {
         onSubmit={handleSubmit}
       />
       
-      {error && (
-        <div className="text-red-500 mt-4 p-3 bg-red-50 border border-red-200 rounded">
-          データ取得エラーが発生しました
-        </div>
-      )}
+      <ErrorMessage error={error} getErrorMessage={getErrorMessage} />
     </div>
   );
 } 
