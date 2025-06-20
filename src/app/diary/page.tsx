@@ -22,22 +22,29 @@ export default function DiaryEdit() {
   } = useDiaryForm({ userId });
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-2">
+    <div className="min-h-screen bg-gradient-to-br from-cyan-50 via-teal-50 to-cyan-100">
       <ToastContainer position="top-right" toastClassName="custom-toast" className="custom-toast-body" />
       
-      <h1 className="text-2xl font-bold mb-4">日記を書く</h1>
-      
-      <DiaryForm
-        formData={formData}
-        onDateChange={handleDateChange}
-        onPreviousDay={() => changeDate(-1)}
-        onNextDay={() => changeDate(1)}
-        onMentalScoreChange={handleMentalScoreChange}
-        onContentChange={handleContentChange}
-        onSubmit={handleSubmit}
-      />
-      
-      <ErrorMessage error={error} getErrorMessage={getErrorMessage} />
+      <div className="max-w-sm mx-auto px-4 py-6">
+        <div className="mb-6">
+          <h1 className="text-xl font-bold text-cyan-800 text-center mb-1">
+            Daily Journal
+          </h1>
+          <p className="text-cyan-600 text-center text-sm">今日の記録を残しましょう</p>
+        </div>
+        
+        <DiaryForm
+          formData={formData}
+          onDateChange={handleDateChange}
+          onPreviousDay={() => changeDate(-1)}
+          onNextDay={() => changeDate(1)}
+          onMentalScoreChange={handleMentalScoreChange}
+          onContentChange={handleContentChange}
+          onSubmit={handleSubmit}
+        />
+        
+        <ErrorMessage error={error} getErrorMessage={getErrorMessage} />
+      </div>
     </div>
   );
 } 

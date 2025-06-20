@@ -50,17 +50,17 @@ export const DiaryForm: React.FC<DiaryFormProps> = ({
         label="日記"
         placeholder="今日の出来事や気持ちを書いてみましょう..."
         id="content"
-        rows={3}
+        rows={4}
       />
       
       <Button
         type="submit"
         variant="primary"
-        size="sm"
+        size="md"
         fullWidth
         disabled={isLoading}
       >
-        {isLoading ? "保存中..." : "保存"}
+        {isLoading ? "保存中..." : "保存する"}
       </Button>
     </form>
   );

@@ -80,7 +80,7 @@ export default function RootLayout({
           </main>
 
           {/* モバイル用ボトムナビゲーション */}
-          <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white border-t">
+          {/* <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white border-t">
             <div className="grid h-16 grid-cols-3">
               <Link
                 href="/diary"
@@ -111,7 +111,7 @@ export default function RootLayout({
                 <span className="text-xs mt-1">設定</span>
               </Link>
             </div>
-          </nav>
+          </nav> */}
         </div>
       </body>
     </html>

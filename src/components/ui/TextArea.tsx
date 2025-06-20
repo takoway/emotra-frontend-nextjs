@@ -26,7 +26,7 @@ export const TextArea: React.FC<TextAreaProps> = ({
   return (
     <div>
       {label && (
-        <label htmlFor={id} className="block text-sm font-medium mb-2">
+        <label htmlFor={id} className="block text-xs font-semibold mb-2 text-cyan-700 uppercase tracking-wide">
           {label}
         </label>
       )}
@@ -37,7 +37,10 @@ export const TextArea: React.FC<TextAreaProps> = ({
         placeholder={placeholder}
         rows={rows}
         required={required}
-        className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-gray-500 resize-none"
+        className="w-full p-3 border border-cyan-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 resize-none bg-white text-cyan-800 placeholder-cyan-400 text-sm font-medium transition-colors duration-200"
+        style={{
+          minHeight: `${rows * 1.2}rem`
+        }}
       />
     </div>
   );
