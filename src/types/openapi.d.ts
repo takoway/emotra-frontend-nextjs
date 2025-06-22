@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-    "/diaries": {
+    "/me/diaries": {
         parameters: {
             query?: never;
             header?: never;
@@ -13,7 +13,7 @@ export interface paths {
         };
         /**
          * 日記一覧取得
-         * @description 日記の一覧を取得します
+         * @description 現在のユーザーの日記一覧を取得します
          */
         get: {
             parameters: {
@@ -49,7 +49,7 @@ export interface paths {
         put?: never;
         /**
          * 日記作成
-         * @description 新しい日記を作成します
+         * @description 現在のユーザーの新しい日記を作成します
          */
         post: {
             parameters: {
@@ -110,7 +110,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/diaries/{user_id}/{date}": {
+    "/me/diaries/{date}": {
         parameters: {
             query?: never;
             header?: never;
@@ -119,15 +119,13 @@ export interface paths {
         };
         /**
          * 日記取得
-         * @description 指定されたユーザーIDと日付の日記を取得します
+         * @description 現在のユーザーの指定された日付の日記を取得します
          */
         get: {
             parameters: {
                 query?: never;
                 header?: never;
                 path: {
-                    /** @description ユーザーID */
-                    user_id: number;
                     /** @description 日付（YYYY-MM-DD形式） */
                     date: string;
                 };
@@ -146,7 +144,7 @@ export interface paths {
                         };
                     };
                 };
-                /** @description リクエストが不正（無効なユーザーID） */
+                /** @description リクエストが不正（無効な日付） */
                 400: {
                     headers: {
                         [name: string]: unknown;
@@ -177,15 +175,13 @@ export interface paths {
         };
         /**
          * 日記更新
-         * @description 指定されたユーザーIDと日付の日記を更新します
+         * @description 現在のユーザーの指定された日付の日記を更新します
          */
         put: {
             parameters: {
                 query?: never;
                 header?: never;
                 path: {
-                    /** @description ユーザーID */
-                    user_id: number;
                     /** @description 日付（YYYY-MM-DD形式） */
                     date: string;
                 };
@@ -240,15 +236,13 @@ export interface paths {
         post?: never;
         /**
          * 日記削除
-         * @description 指定されたユーザーIDと日付の日記を削除します
+         * @description 現在のユーザーの指定された日付の日記を削除します
          */
         delete: {
             parameters: {
                 query?: never;
                 header?: never;
                 path: {
-                    /** @description ユーザーID */
-                    user_id: number;
                     /** @description 日付（YYYY-MM-DD形式） */
                     date: string;
                 };
@@ -271,7 +265,7 @@ export interface paths {
                         };
                     };
                 };
-                /** @description リクエストが不正（無効なユーザーID） */
+                /** @description リクエストが不正（無効な日付） */
                 400: {
                     headers: {
                         [name: string]: unknown;
@@ -327,8 +321,6 @@ export interface components {
         /** @description メンタルスコア（1〜10の整数） */
         Mental: number;
         CreateDiaryDTO: {
-            /** @description ユーザーID */
-            user_id: number;
             /**
              * Format: date
              * @description 日付（YYYY-MM-DD形式）

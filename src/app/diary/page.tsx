@@ -7,9 +7,6 @@ import { ErrorMessage } from "@/components/common/ErrorMessage";
 import { useDiaryForm } from "@/hooks/useDiaryForm";
 
 export default function DiaryEdit() {
-  // 仮のユーザーID（本来は認証情報から取得）
-  const userId = 1;
-  
   const {
     formData,
     error,
@@ -19,7 +16,7 @@ export default function DiaryEdit() {
     handleMentalScoreChange,
     handleContentChange,
     handleSubmit,
-  } = useDiaryForm({ userId });
+  } = useDiaryForm({});
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-2">

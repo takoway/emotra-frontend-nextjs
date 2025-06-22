@@ -7,18 +7,17 @@ import type { components } from "@/types/openapi";
 import { EP } from "@/utils/endpoints";
 import { toast } from "react-toastify";
 
+interface UseDiaryFormProps {
+  initialDate?: string;
+}
+
 interface DiaryFormData {
   date: string;
   mentalScore: number;
   content: string;
 }
 
-interface UseDiaryFormProps {
-  userId: number;
-  initialDate?: string;
-}
-
-export const useDiaryForm = ({ userId, initialDate }: UseDiaryFormProps) => {
+export const useDiaryForm = ({ initialDate }: UseDiaryFormProps) => {
   const router = useRouter();
   
   const [formData, setFormData] = useState<DiaryFormData>({
@@ -30,7 +29,7 @@ export const useDiaryForm = ({ userId, initialDate }: UseDiaryFormProps) => {
   // SWRで日記データ取得
   const { data: diaryData, error, mutate } = useSwr<{
     data?: components["schemas"]["Diary"]
-  }>(EP.get_diary(userId, formData.date));
+  }>(EP.get_diary(formData.date));
 
   // 日付をYYYY-MM-DD形式に変換するユーティリティ
   const formatDate = (dateStr: string) => {
@@ -92,7 +91,6 @@ export const useDiaryForm = ({ userId, initialDate }: UseDiaryFormProps) => {
     e.preventDefault();
     
     const body = {
-      user_id: userId,
       date: formatDate(formData.date),
       mental: formData.mentalScore,
       diary: formData.content,
@@ -105,7 +103,7 @@ export const useDiaryForm = ({ userId, initialDate }: UseDiaryFormProps) => {
       if (diaryData?.data) {
         // 既存日記があれば更新
         result = await fetcherPut<{ data: components["schemas"]["Diary"] }>(
-          EP.update_diary(userId, formatDate(formData.date)),
+          EP.update_diary(formatDate(formData.date)),
           { mental: formData.mentalScore, diary: formData.content }
         );
       } else {
