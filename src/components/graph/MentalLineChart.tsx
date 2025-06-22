@@ -38,6 +38,9 @@ export const MentalLineChart: FC<Props> = ({ diaries }) => {
 
     // ダミーの睡眠スコアを生成（5-9の範囲でランダム）
     const sleepScores = data.map(() => Math.floor(Math.random() * 5) + 5);
+    
+    // ダミーの個人開発時間を生成（1-4の範囲でランダム)
+    const devTimeScores = data.map(() => Math.floor(Math.random() * 4) + 1);
 
     // キャンバスのサイズ設定（CSSサイズ）
     const width = rect.width;
@@ -85,22 +88,34 @@ export const MentalLineChart: FC<Props> = ({ diaries }) => {
     });
 
     // 棒グラフを描画（折れ線グラフの下に配置）
-    const barWidth = chartWidth / data.length * 0.6; // 棒の幅
+    const barWidth = chartWidth / data.length * 0.25; // 棒の幅を少し広くして2つ並べる
+    const barSpacing = chartWidth / data.length * 0.1; // 棒の間隔
     
     data.forEach((diary, index) => {
-      const x = padding + (chartWidth * index) / (data.length - 1) - barWidth / 2;
+      const baseX = padding + (chartWidth * index) / (data.length - 1);
+      
+      // 睡眠スコアの棒グラフ（左）
+      const sleepX = baseX - barWidth / 2 - barSpacing / 2;
       const sleepScore = sleepScores[index];
-      const barHeight = (chartHeight * sleepScore) / 10;
-      const y = padding + chartHeight - barHeight;
+      const sleepBarHeight = (chartHeight * sleepScore) / 10;
+      const sleepY = padding + chartHeight - sleepBarHeight;
       
-      // 薄い青色の棒グラフ
-      ctx.fillStyle = "rgba(0, 175, 204, 0.2)";
-      ctx.fillRect(x, y, barWidth, barHeight);
-      
-      // 棒グラフの枠線
+      ctx.fillStyle = "rgba(0, 175, 204, 0.2)"; // 薄い青色
+      ctx.fillRect(sleepX, sleepY, barWidth, sleepBarHeight);
       ctx.strokeStyle = "rgba(0, 175, 204, 0.4)";
       ctx.lineWidth = 1;
-      ctx.strokeRect(x, y, barWidth, barHeight);
+      ctx.strokeRect(sleepX, sleepY, barWidth, sleepBarHeight);
+      
+      // 個人開発時間の棒グラフ（右）
+      const devX = baseX + barWidth / 2 + barSpacing / 2;
+      const devScore = devTimeScores[index];
+      const devBarHeight = (chartHeight * devScore) / 10;
+      const devY = padding + chartHeight - devBarHeight;
+      
+      ctx.fillStyle = "rgba(75, 192, 192, 0.2)"; // 薄い緑色
+      ctx.fillRect(devX, devY, barWidth, devBarHeight);
+      ctx.strokeStyle = "rgba(75, 192, 192, 0.4)";
+      ctx.strokeRect(devX, devY, barWidth, devBarHeight);
     });
 
     // 折れ線グラフを描画（棒グラフの上に配置）
