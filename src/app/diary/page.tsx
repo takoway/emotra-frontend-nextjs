@@ -2,7 +2,7 @@
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { DiaryForm } from "@/components/diary/DiaryForm";
+import { DiaryForm } from "./DiaryForm";
 import { ErrorMessage } from "@/components/common/ErrorMessage";
 import { useDiaryForm } from "@/hooks/useDiaryForm";
 

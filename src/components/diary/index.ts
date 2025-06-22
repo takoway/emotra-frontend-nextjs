@@ -1,1 +1,0 @@
-export { DiaryForm } from "./DiaryForm";
