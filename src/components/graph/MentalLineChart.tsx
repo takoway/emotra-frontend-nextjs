@@ -36,6 +36,9 @@ export const MentalLineChart: FC<Props> = ({ diaries }) => {
     // 日付昇順でソート
     const data = [...diaries].sort((a, b) => a.date.localeCompare(b.date));
 
+    // ダミーの睡眠スコアを生成（5-9の範囲でランダム）
+    const sleepScores = data.map(() => Math.floor(Math.random() * 5) + 5);
+
     // キャンバスのサイズ設定（CSSサイズ）
     const width = rect.width;
     const height = rect.height;
@@ -81,7 +84,26 @@ export const MentalLineChart: FC<Props> = ({ diaries }) => {
       ctx.fillText(dateStr, x, height - bottomPadding + 30);
     });
 
-    // 折れ線グラフを描画
+    // 棒グラフを描画（折れ線グラフの下に配置）
+    const barWidth = chartWidth / data.length * 0.6; // 棒の幅
+    
+    data.forEach((diary, index) => {
+      const x = padding + (chartWidth * index) / (data.length - 1) - barWidth / 2;
+      const sleepScore = sleepScores[index];
+      const barHeight = (chartHeight * sleepScore) / 10;
+      const y = padding + chartHeight - barHeight;
+      
+      // 薄い青色の棒グラフ
+      ctx.fillStyle = "rgba(0, 175, 204, 0.2)";
+      ctx.fillRect(x, y, barWidth, barHeight);
+      
+      // 棒グラフの枠線
+      ctx.strokeStyle = "rgba(0, 175, 204, 0.4)";
+      ctx.lineWidth = 1;
+      ctx.strokeRect(x, y, barWidth, barHeight);
+    });
+
+    // 折れ線グラフを描画（棒グラフの上に配置）
     if (data.length > 1) {
       ctx.strokeStyle = "#00afcc";
       ctx.lineWidth = 2;
