@@ -110,6 +110,70 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/me/diaries/range": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 期間指定日記取得
+         * @description 現在のユーザーの指定された期間の日記を取得します
+         */
+        get: {
+            parameters: {
+                query: {
+                    /** @description 開始日（YYYY-MM-DD形式） */
+                    start_date: string;
+                    /** @description 終了日（YYYY-MM-DD形式） */
+                    end_date: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description 取得成功 */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            data?: components["schemas"]["Diary"][];
+                        };
+                    };
+                };
+                /** @description リクエストが不正（パラメータ不足） */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description サーバーエラー */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/me/diaries/{date}": {
         parameters: {
             query?: never;

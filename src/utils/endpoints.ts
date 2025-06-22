@@ -13,4 +13,7 @@ export const EP = {
 
   // 日記削除（日付指定）
   delete_diary: (date: string) => `/me/diaries/${date}`,
+
+  // 期間指定日記取得
+  range_diaries: (start_date: string, end_date: string) => `/me/diaries/range?start_date=${start_date}&end_date=${end_date}`,
 };
