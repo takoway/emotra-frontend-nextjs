@@ -74,7 +74,7 @@ export const MentalLineChart: FC<Props> = ({ diaries }) => {
     ctx.textAlign = "right";
     for (let i = 0; i <= 10; i++) {
       const y = padding + (chartHeight * (10 - i)) / 10;
-      ctx.fillText(i.toString(), padding - 5, y + 4);
+      ctx.fillText(i.toString(), padding - 15, y + 4);
     }
 
     // X軸ラベル（日付）
